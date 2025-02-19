@@ -39,6 +39,13 @@
 				<h1><b>{character.name}</b></h1>
 				<p>Age: {character.age}</p>
 				<p>Height: {character.height}</p>
+				<p>Weight: {character.weight}</p>
+				<p>Strength: {character.attributes.strength}</p>
+				<p>Dexterity: {character.attributes.dexterity}</p>
+				<p>Constitution: {character.attributes.constitution}</p>
+				<p>Intelligence: {character.attributes.intelligence}</p>
+				<p>Wisdom: {character.attributes.wisdom}</p>
+				<p>Charisma: {character.attributes.charisma}</p>
 			</div>
 		{/each}
 	</div>
@@ -163,6 +170,10 @@
 		padding: 10px 20px;
 		border-radius: 10px;
 		margin: 10px;
+	}
+	.character-card p {
+		font-family: 'Courier New', Courier, monospace;
+		font-weight: bold;
 	}
 
 	.character-image {

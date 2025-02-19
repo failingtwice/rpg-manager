@@ -3,6 +3,7 @@
 	import { Dungeon, type DungeonResult } from '../logic/dungeon';
 	import portrait from '../lib/images/portrait.jpeg';
 	import dungeonImage from '../lib/images/dungeon.jpg';
+	import { Species } from '../logic/species';
 
 	let results: DungeonResult = {
 		finished: false,
@@ -37,6 +38,7 @@
 			<div class="character-card">
 				<img class="character-image" src={portrait} alt={character.name} />
 				<h1><b>{character.name}</b></h1>
+				<p>{character.species.name}</p>
 				<p>Age: {character.age}</p>
 				<p>Height: {character.height}</p>
 				<p>Weight: {character.weight}</p>

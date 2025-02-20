@@ -1,31 +1,7 @@
 import { Random } from './random';
 
-export enum LifeStage {
-	Youth = 15,
-	Young = 22,
-	Adult = 35,
-	Mature = 50,
-	Elderly = 70,
-	Ancient = 80
-}
-
-export const lifeStages = [
-	LifeStage.Youth,
-	LifeStage.Young,
-	LifeStage.Adult,
-	LifeStage.Mature,
-	LifeStage.Elderly,
-	LifeStage.Ancient
-];
-
-export function getRandomLifeStage(): LifeStage {
-	const lifeStage = lifeStages[Random.randomNumber(0, lifeStages.length - 1)];
-	return lifeStage;
-}
-
-export function getRandomAge(lifeStage: LifeStage): number {
-	const nextLifeStage = lifeStages[lifeStages.indexOf(lifeStage) + 1];
-	const age = Random.randomNumber(lifeStage, nextLifeStage);
-
+export function getRandomAge(): number {
+	// Generate two random numbers between 15 and 60, then average them.
+	const age = Math.round((Random.randomNumber(15, 60) + Random.randomNumber(15, 60)) / 2);
 	return age;
 }

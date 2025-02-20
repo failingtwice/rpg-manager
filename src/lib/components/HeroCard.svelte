@@ -27,6 +27,9 @@
 		<p>
 			{character.age}
 		</p>
+		<p>
+			{character.characterClass.toString()}
+		</p>
 	</div>
 
 	<div class="mt-2 grid grid-cols-3 gap-2">

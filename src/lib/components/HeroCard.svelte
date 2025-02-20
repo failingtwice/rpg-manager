@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Character } from '$lib/logic/character';
-	import { Rarity } from '$lib/logic/attributes';
+	import { Rarity } from '$lib/logic/rarity';
 
 	const { character }: { character: Character } = $props();
 </script>
@@ -10,6 +10,7 @@
 	class:bg-stone-200={character.attributes.rarity === Rarity.Common}
 	class:bg-sky-200={character.attributes.rarity === Rarity.Uncommon}
 	class:bg-orange-200={character.attributes.rarity === Rarity.Rare}
+	class:bg-purple-200={character.attributes.rarity === Rarity.Legendary}
 >
 	<div class="align-center flex justify-between">
 		<h1 class="whitespace-nowrap">

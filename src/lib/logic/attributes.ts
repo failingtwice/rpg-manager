@@ -1,11 +1,6 @@
 import { LifeStage } from './age';
 import { Random } from './random';
-
-export enum Rarity {
-	Common = 'Common',
-	Uncommon = 'Uncommon',
-	Rare = 'Rare'
-}
+import { Rarity } from './rarity';
 
 export class Attributes {
 	strength: number;
@@ -34,13 +29,13 @@ export class Attributes {
 		this.rarity = rarity;
 	}
 
-	static createRandomAttributes(age: number, lifeStage: LifeStage) {
+	static createRandomAttributes(age: number, lifeStage: LifeStage, rarity: Rarity) {
 		// Ensure minimum age is 15
 		if (age < 15) {
 			throw new Error('Age must be at least 15');
 		}
 
-		// Bell curve function (normal distribution approximation)
+		// Define bell curve function (normal distribution approximation)
 		const normalRoll = (mean: number, stdDev: number) => {
 			let sum = 0;
 			for (let i = 0; i < 3; i++) {
@@ -49,104 +44,76 @@ export class Attributes {
 			return Math.round(sum / 3);
 		};
 
+		// Define base stat ranges for different rarities
+		const rarityModifiers = {
+			[Rarity.Common]: { meanBoost: 0, stdDevBoost: 0 }, // Normal bell curve
+			[Rarity.Uncommon]: { meanBoost: 7, stdDevBoost: 5 }, // Slightly higher stats
+			[Rarity.Rare]: { meanBoost: 12, stdDevBoost: 7 }, // Much better stats
+			[Rarity.Legendary]: { meanBoost: 15, stdDevBoost: 10 } // Legendary stats
+		};
+
+		const { meanBoost, stdDevBoost } = rarityModifiers[rarity];
+
 		// Define base stat ranges for different life stages
 		let strength, dexterity, constitution, intelligence, wisdom, charisma;
 
 		switch (lifeStage) {
 			case LifeStage.Youth:
-				strength = normalRoll(40, 10);
-				dexterity = normalRoll(45, 10);
-				constitution = normalRoll(40, 10);
-				intelligence = normalRoll(45, 10);
-				wisdom = normalRoll(35, 10);
-				charisma = normalRoll(45, 10);
+				strength = normalRoll(40 + meanBoost, 10 + stdDevBoost);
+				dexterity = normalRoll(45 + meanBoost, 10 + stdDevBoost);
+				constitution = normalRoll(40 + meanBoost, 10 + stdDevBoost);
+				intelligence = normalRoll(45 + meanBoost, 10 + stdDevBoost);
+				wisdom = normalRoll(35 + meanBoost, 10 + stdDevBoost);
+				charisma = normalRoll(45 + meanBoost, 10 + stdDevBoost);
 				break;
 
 			case LifeStage.Young:
-				strength = normalRoll(50, 15);
-				dexterity = normalRoll(55, 15);
-				constitution = normalRoll(55, 15);
-				intelligence = normalRoll(50, 15);
-				wisdom = normalRoll(45, 15);
-				charisma = normalRoll(55, 15);
+				strength = normalRoll(50 + meanBoost, 15 + stdDevBoost);
+				dexterity = normalRoll(55 + meanBoost, 15 + stdDevBoost);
+				constitution = normalRoll(55 + meanBoost, 15 + stdDevBoost);
+				intelligence = normalRoll(50 + meanBoost, 15 + stdDevBoost);
+				wisdom = normalRoll(45 + meanBoost, 15 + stdDevBoost);
+				charisma = normalRoll(55 + meanBoost, 15 + stdDevBoost);
 				break;
 
 			case LifeStage.Adult:
-				strength = normalRoll(60, 15);
-				dexterity = normalRoll(60, 15);
-				constitution = normalRoll(60, 15);
-				intelligence = normalRoll(55, 15);
-				wisdom = normalRoll(55, 15);
-				charisma = normalRoll(55, 15);
+				strength = normalRoll(60 + meanBoost, 15 + stdDevBoost);
+				dexterity = normalRoll(60 + meanBoost, 15 + stdDevBoost);
+				constitution = normalRoll(60 + meanBoost, 15 + stdDevBoost);
+				intelligence = normalRoll(55 + meanBoost, 15 + stdDevBoost);
+				wisdom = normalRoll(55 + meanBoost, 15 + stdDevBoost);
+				charisma = normalRoll(55 + meanBoost, 15 + stdDevBoost);
 				break;
 
 			case LifeStage.Mature:
-				strength = normalRoll(55, 15);
-				dexterity = normalRoll(55, 15);
-				constitution = normalRoll(55, 15);
-				intelligence = normalRoll(65, 15);
-				wisdom = normalRoll(70, 15);
-				charisma = normalRoll(65, 15);
+				strength = normalRoll(55 + meanBoost, 15 + stdDevBoost);
+				dexterity = normalRoll(55 + meanBoost, 15 + stdDevBoost);
+				constitution = normalRoll(55 + meanBoost, 15 + stdDevBoost);
+				intelligence = normalRoll(65 + meanBoost, 15 + stdDevBoost);
+				wisdom = normalRoll(70 + meanBoost, 15 + stdDevBoost);
+				charisma = normalRoll(65 + meanBoost, 15 + stdDevBoost);
 				break;
 
 			case LifeStage.Elderly:
-				strength = normalRoll(40, 15);
-				dexterity = normalRoll(40, 15);
-				constitution = normalRoll(40, 15);
-				intelligence = normalRoll(75, 15);
-				wisdom = normalRoll(85, 15);
-				charisma = normalRoll(75, 15);
+				strength = normalRoll(40 + meanBoost, 15 + stdDevBoost);
+				dexterity = normalRoll(40 + meanBoost, 15 + stdDevBoost);
+				constitution = normalRoll(40 + meanBoost, 15 + stdDevBoost);
+				intelligence = normalRoll(75 + meanBoost, 15 + stdDevBoost);
+				wisdom = normalRoll(85 + meanBoost, 15 + stdDevBoost);
+				charisma = normalRoll(75 + meanBoost, 15 + stdDevBoost);
 				break;
 
 			case LifeStage.Ancient:
-				strength = normalRoll(30, 10);
-				dexterity = normalRoll(30, 10);
-				constitution = normalRoll(30, 10);
-				intelligence = normalRoll(80, 15);
-				wisdom = normalRoll(90, 15);
-				charisma = normalRoll(80, 15);
+				strength = normalRoll(30 + meanBoost, 10 + stdDevBoost);
+				dexterity = normalRoll(30 + meanBoost, 10 + stdDevBoost);
+				constitution = normalRoll(30 + meanBoost, 10 + stdDevBoost);
+				intelligence = normalRoll(80 + meanBoost, 15 + stdDevBoost);
+				wisdom = normalRoll(90 + meanBoost, 15 + stdDevBoost);
+				charisma = normalRoll(80 + meanBoost, 15 + stdDevBoost);
 				break;
 		}
 
-		// **BLACK SWAN EVENTS (7% Chance Each)**
-		const blackSwanChance = 7;
-
-		let rarity = Rarity.Common;
-
-		if (Random.randomNumber(1, 100) <= blackSwanChance) {
-			rarity = Rarity.Uncommon;
-			if (lifeStage === LifeStage.Youth || lifeStage === LifeStage.Young) {
-				// **Child Prodigy: Gains +20% to Intelligence/Wisdom**
-				intelligence *= 1.2;
-				wisdom *= 1.2;
-			} else if (lifeStage === LifeStage.Elderly || lifeStage === LifeStage.Ancient) {
-				// **Old but Athletic: Retains Adult-Level Physical Stats**
-				strength = normalRoll(60, 15);
-				dexterity = normalRoll(60, 15);
-				constitution = normalRoll(60, 15);
-			} else if (lifeStage === LifeStage.Adult) {
-				// **Deteriorated Adult: Physical Decline Happens Early**
-				strength *= 0.75;
-				dexterity *= 0.75;
-				constitution *= 0.75;
-			}
-
-			if (Random.randomNumber(1, 100) <= blackSwanChance) {
-				rarity = Rarity.Rare;
-				// **Genius/Idiot (7% chance)**
-				if (Random.randomNumber(1, 2) === 1) {
-					// Genius: Gains +30% to Intelligence/Wisdom
-					intelligence *= 1.3;
-					wisdom *= 1.3;
-				} else {
-					// Idiot: -30% Intelligence/Wisdom
-					intelligence *= 0.7;
-					wisdom *= 0.7;
-				}
-			}
-		}
-
-		// **Ensure No Attribute Exceeds 99 or Falls Below 1**
+		// Ensure attributes remain within 1-99 range
 		strength = Math.min(99, Math.max(1, Math.round(strength)));
 		dexterity = Math.min(99, Math.max(1, Math.round(dexterity)));
 		constitution = Math.min(99, Math.max(1, Math.round(constitution)));
@@ -154,7 +121,6 @@ export class Attributes {
 		wisdom = Math.min(99, Math.max(1, Math.round(wisdom)));
 		charisma = Math.min(99, Math.max(1, Math.round(charisma)));
 
-		// Return Final Attributes
 		return new Attributes(
 			strength,
 			dexterity,

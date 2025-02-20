@@ -5,6 +5,8 @@ import { SpeciesName, getRandomSpecies } from './species';
 import { getPortrait } from './portrait';
 import { getRandomAge, getRandomLifeStage } from './age';
 import { Random } from './random';
+import { getRandomRarity } from './rarity';
+
 export class Character {
 	name: string;
 	species: SpeciesName;
@@ -60,6 +62,7 @@ export class Character {
 		const name = getRandomName(species);
 		const portrait = getPortrait(species);
 		const lifeStage = getRandomLifeStage();
+		const rarity = getRandomRarity();
 		const age = getRandomAge(lifeStage);
 
 		const height = Random.randomNumber(100, 200);
@@ -76,7 +79,7 @@ export class Character {
 			weight,
 			luck,
 			cooperation,
-			Attributes.createRandomAttributes(age, lifeStage)
+			Attributes.createRandomAttributes(age, lifeStage, rarity)
 		);
 	}
 }

@@ -40,7 +40,7 @@ export default class Character {
 
 	static randomCharacter(): Character {
 		const name = names[Math.floor(Math.random() * names.length)];
-		// const species = Species.getRandomSpecies();
+		const species = Species.getRandomSpecies();
 		const age = Dice.d(90);
 		const height = Dice.d(200);
 		const weight = Dice.d(100);
@@ -49,7 +49,7 @@ export default class Character {
 
 		return new Character(
 			name,
-			{ name: 'pavel', portraitPath: '' },
+			species,
 			age,
 			height,
 			weight,

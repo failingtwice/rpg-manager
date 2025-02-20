@@ -1,17 +1,14 @@
 import { Character } from '$lib/logic/character';
+import { persistate } from '$lib/state/persistate.svelte';
 
-const name = $state('No name');
-const roster = $state<Character[]>([]);
-const gold = $state(0);
+type Player = {
+	name: string,
+	roster: Character[],
+	gold: number
+}
 
-export const player = $state({
-	name,
-	roster,
-	gold
+export const player = persistate<Player>('player', {
+	name: "Player",
+	roster: [],
+	gold: 0
 });
-
-player.roster.push(Character.randomCharacter());
-player.roster.push(Character.randomCharacter());
-player.roster.push(Character.randomCharacter());
-player.roster.push(Character.randomCharacter());
-player.roster.push(Character.randomCharacter());

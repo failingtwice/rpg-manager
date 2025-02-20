@@ -1,16 +1,26 @@
 <script lang="ts">
 	import { Character } from '$lib/logic/character';
-	const { character, portrait }: { character: Character; portrait: string } = $props();
+	const { character }: { character: Character } = $props();
 </script>
 
-<div class="rounded-lg bg-stone-200 p-4 pt-2">
+<div class="rounded-lg bg-stone-200 p-4 pt-2 w-156px">
 	<div class="align-center flex justify-between">
 		<h1>
 			{character.name}
 		</h1>
 		<h2>{character.average}</h2>
 	</div>
-	<img class="mx-auto rounded-lg" src={portrait} alt={character.name} />
+	<img class="mx-auto rounded-lg" src={character.species.portraitPath} alt={character.name} />
+
+	<div>
+		<p>
+			{character.species.name}
+		</p>
+		<p>
+			{character.age}
+		</p>
+		
+	</div>
 
 	<div class="mt-2 grid grid-cols-3 gap-2">
 		<p class="text-center text-red-700">
@@ -50,4 +60,5 @@
 </div>
 
 <style>
+
 </style>

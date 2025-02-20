@@ -1,6 +1,12 @@
 import { LifeStage } from './age';
 import { Random } from './random';
 
+export enum Rarity {
+	Common = 'Common',
+	Uncommon = 'Uncommon',
+	Rare = 'Rare'
+}
+
 export class Attributes {
 	strength: number;
 	dexterity: number;
@@ -8,6 +14,7 @@ export class Attributes {
 	intelligence: number;
 	wisdom: number;
 	charisma: number;
+	rarity: Rarity;
 
 	constructor(
 		strength: number,
@@ -15,7 +22,8 @@ export class Attributes {
 		constitution: number,
 		intelligence: number,
 		wisdom: number,
-		charisma: number
+		charisma: number,
+		rarity: Rarity
 	) {
 		this.strength = strength;
 		this.dexterity = dexterity;
@@ -23,6 +31,7 @@ export class Attributes {
 		this.intelligence = intelligence;
 		this.wisdom = wisdom;
 		this.charisma = charisma;
+		this.rarity = rarity;
 	}
 
 	static createRandomAttributes(age: number, lifeStage: LifeStage) {
@@ -102,7 +111,10 @@ export class Attributes {
 		// **BLACK SWAN EVENTS (7% Chance Each)**
 		const blackSwanChance = 7;
 
+		let rarity = Rarity.Common;
+
 		if (Random.randomNumber(1, 100) <= blackSwanChance) {
+			rarity = Rarity.Uncommon;
 			if (lifeStage === LifeStage.Youth || lifeStage === LifeStage.Young) {
 				// **Child Prodigy: Gains +20% to Intelligence/Wisdom**
 				intelligence *= 1.2;
@@ -120,6 +132,7 @@ export class Attributes {
 			}
 
 			if (Random.randomNumber(1, 100) <= blackSwanChance) {
+				rarity = Rarity.Rare;
 				// **Genius/Idiot (7% chance)**
 				if (Random.randomNumber(1, 2) === 1) {
 					// Genius: Gains +30% to Intelligence/Wisdom
@@ -142,6 +155,14 @@ export class Attributes {
 		charisma = Math.min(99, Math.max(1, Math.round(charisma)));
 
 		// Return Final Attributes
-		return new Attributes(strength, dexterity, constitution, intelligence, wisdom, charisma);
+		return new Attributes(
+			strength,
+			dexterity,
+			constitution,
+			intelligence,
+			wisdom,
+			charisma,
+			rarity
+		);
 	}
 }

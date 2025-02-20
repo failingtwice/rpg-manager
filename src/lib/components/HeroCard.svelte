@@ -1,9 +1,16 @@
 <script lang="ts">
 	import { Character } from '$lib/logic/character';
+	import { Rarity } from '$lib/logic/attributes';
+
 	const { character }: { character: Character } = $props();
 </script>
 
-<div class="rounded-lg bg-stone-200 p-4 pt-2 w-156px">
+<div
+	class="w-156px rounded-lg p-4 pt-2"
+	class:bg-stone-200={character.attributes.rarity === Rarity.Common}
+	class:bg-sky-200={character.attributes.rarity === Rarity.Uncommon}
+	class:bg-orange-200={character.attributes.rarity === Rarity.Rare}
+>
 	<div class="align-center flex justify-between">
 		<h1 class="whitespace-nowrap">
 			{character.name}
@@ -19,7 +26,6 @@
 		<p>
 			{character.age}
 		</p>
-		
 	</div>
 
 	<div class="mt-2 grid grid-cols-3 gap-2">
@@ -60,5 +66,4 @@
 </div>
 
 <style>
-
 </style>

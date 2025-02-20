@@ -5,16 +5,16 @@
 
 <div class="rounded-lg bg-stone-200 p-4 pt-2 w-156px">
 	<div class="align-center flex justify-between">
-		<h1>
+		<h1 class="whitespace-nowrap">
 			{character.name}
 		</h1>
 		<h2>{character.average}</h2>
 	</div>
-	<img class="mx-auto rounded-lg" src={character.species.portraitPath} alt={character.name} />
+	<img class="mx-auto rounded-lg" src={character.portrait} alt={character.name} />
 
 	<div>
 		<p>
-			{character.species.name}
+			{character.species.toString()}
 		</p>
 		<p>
 			{character.age}

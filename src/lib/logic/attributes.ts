@@ -99,8 +99,8 @@ export class Attributes {
 				break;
 		}
 
-		// **BLACK SWAN EVENTS (10% Chance Each)**
-		const blackSwanChance = 10;
+		// **BLACK SWAN EVENTS (7% Chance Each)**
+		const blackSwanChance = 7;
 
 		if (Random.randomNumber(1, 100) <= blackSwanChance) {
 			if (lifeStage === LifeStage.Youth || lifeStage === LifeStage.Young) {
@@ -120,7 +120,7 @@ export class Attributes {
 			}
 
 			if (Random.randomNumber(1, 100) <= blackSwanChance) {
-				// **Genius/Idiot (10% chance)**
+				// **Genius/Idiot (7% chance)**
 				if (Random.randomNumber(1, 2) === 1) {
 					// Genius: Gains +30% to Intelligence/Wisdom
 					intelligence *= 1.3;

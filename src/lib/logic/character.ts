@@ -1,10 +1,11 @@
 import { Attributes } from './attributes';
 import Dice from './dice';
 import { names } from './names';
+import { Species } from './species';
 
 export class Character {
 	name: string;
-
+	species: Species;
 	age: number;
 	height: number;
 	weight: number;
@@ -18,6 +19,7 @@ export class Character {
 
 	constructor(
 		name: string,
+		species: Species,
 		age: number,
 		height: number,
 		weight: number,
@@ -28,6 +30,7 @@ export class Character {
 		attributes: Attributes
 	) {
 		this.name = name;
+		this.species = species;
 		this.age = age;
 		this.height = height;
 		this.weight = weight;
@@ -49,6 +52,7 @@ export class Character {
 
 	static randomCharacter(): Character {
 		const name = names[Math.floor(Math.random() * names.length)];
+		const species = Species.getRandomSpecies();
 		const age = Dice.d(90);
 		const height = Dice.d(200);
 		const weight = Dice.d(100);
@@ -57,6 +61,7 @@ export class Character {
 
 		return new Character(
 			name,
+			species,
 			age,
 			height,
 			weight,

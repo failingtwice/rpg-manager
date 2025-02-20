@@ -2,7 +2,7 @@ import { Attributes } from './attributes';
 import Dice from './dice';
 import { names } from './names';
 
-export default class Character {
+export class Character {
 	name: string;
 
 	age: number;
@@ -13,6 +13,8 @@ export default class Character {
 	cooperation: number;
 
 	attributes: Attributes;
+
+	average: number;
 
 	constructor(
 		name: string,
@@ -33,6 +35,16 @@ export default class Character {
 		this.luck = luck;
 		this.cooperation = cooperation;
 		this.attributes = attributes;
+
+		this.average = Math.floor(
+			(this.attributes.strength +
+				this.attributes.dexterity +
+				this.attributes.constitution +
+				this.attributes.intelligence +
+				this.attributes.wisdom +
+				this.attributes.charisma) /
+				6
+		);
 	}
 
 	static randomCharacter(): Character {

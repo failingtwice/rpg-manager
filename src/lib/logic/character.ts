@@ -3,7 +3,8 @@ import Dice from './dice';
 import { getRandomName } from './names';
 import { SpeciesName, getRandomSpecies } from './species';
 import { getPortrait } from './portrait';
-
+import { getRandomAge, getRandomLifeStage } from './age';
+import { Random } from './random';
 export class Character {
 	name: string;
 	species: SpeciesName;
@@ -58,11 +59,13 @@ export class Character {
 		const species = getRandomSpecies();
 		const name = getRandomName(species);
 		const portrait = getPortrait(species);
-		const age = Dice.d(90);
-		const height = Dice.d(200);
-		const weight = Dice.d(100);
-		const luck = Dice.d100();
-		const cooperation = Dice.d100();
+		const lifeStage = getRandomLifeStage();
+		const age = getRandomAge(lifeStage);
+
+		const height = Random.randomNumber(100, 200);
+		const weight = Random.randomNumber(50, 100);
+		const luck = Random.randomNumber(0, 100);
+		const cooperation = Random.randomNumber(0, 100);
 
 		return new Character(
 			name,
@@ -73,7 +76,7 @@ export class Character {
 			weight,
 			luck,
 			cooperation,
-			Attributes.createRandomAttributes()
+			Attributes.createRandomAttributes(age, lifeStage)
 		);
 	}
 }

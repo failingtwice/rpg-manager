@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Character from '../logic/character';
 	import { Dungeon, type DungeonResult } from '../logic/dungeon';
-	import portrait from '../lib/images/portrait.jpeg';
+	// import portrait from '../lib/images/portrait.jpeg'; //disabled static portrait to change dynamic portrait changes
 	import dungeonImage from '../lib/images/dungeon.jpg';
 	import { Species } from '../logic/species';
 
@@ -11,7 +11,7 @@
 		loot: 0,
 		casualties: []
 	};
-
+	console.log('here');
 	const party = [
 		Character.randomCharacter(),
 		Character.randomCharacter(),
@@ -36,7 +36,15 @@
 	<div class="party-container">
 		{#each party as character}
 			<div class="character-card">
-				<img class="character-image" src={portrait} alt={character.name} />
+				<!-- Debug info -->
+				<p style="color: red;">Debug portrait path: {character.species.portraitPath}</p>
+				<p style="color: red;">Debug species name: {character.species.name}</p>
+
+				<img
+					class="character-image"
+					src={character.species.portraitPath}
+					alt={character.name}					
+				/>
 				<h1><b>{character.name}</b></h1>
 				<p>{character.species.name}</p>
 				<p>Age: {character.age}</p>

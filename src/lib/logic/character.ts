@@ -86,3 +86,81 @@ export class Character {
 		);
 	}
 }
+
+export function getAttributeDisplayName(attributeName: string): string {
+	switch (attributeName) {
+		case 'initiative':
+			return 'Initiative';
+		case 'health':
+			return 'Health';
+		case 'healthRegen':
+			return 'Health Regen';
+		case 'mana':
+			return 'Mana';
+		case 'manaRegen':
+			return 'Mana Regen';
+		case 'attackDamage':
+			return 'Attack Damage';
+		case 'critMult':
+			return 'Crit Mult';
+		case 'critChance':
+			return 'Crit Chance';
+		case 'armor':
+			return 'Armor';
+		case 'armorPen':
+			return 'Armor Pen';
+		case 'accuracy':
+			return 'Accuracy';
+		case 'evasion':
+			return 'Evasion';
+		case 'magicPower':
+			return 'Magic Power';
+		case 'magicPen':
+			return 'Magic Pen';
+		case 'magicResist':
+			return 'Magic Resist';
+		case 'statusResist':
+			return 'Status Resist';
+		default:
+			throw new Error(`Invalid attribute name: ${attributeName}`);
+	}
+}
+
+export function getChracterStatByName(character: Character, attributeName: string): number {
+	switch (attributeName) {
+		case 'initiative':
+			return character.attributes.initiative;
+		case 'health':
+			return character.attributes.health;
+		case 'healthRegen':
+			return character.attributes.healthRegen;
+		case 'mana':
+			return character.attributes.mana;
+		case 'manaRegen':
+			return character.attributes.manaRegen;
+		case 'attackDamage':
+			return character.attributes.attackDamage;
+		case 'critMult':
+			return character.attributes.critMult;
+		case 'critChance':
+			return character.attributes.critChance;
+		case 'armor':
+			return character.attributes.armor;
+		case 'armorPen':
+			return character.attributes.armorPen;
+		case 'accuracy':
+			return character.attributes.accuracy;
+		case 'evasion':
+			return character.attributes.evasion;
+		case 'magicPower':
+			return character.attributes.magicPower;
+		case 'magicPen':
+			return character.attributes.magicPen;
+		case 'magicResist':
+			return character.attributes.magicResist;
+		case 'statusResist':
+			return character.attributes.statusResist;
+		default:
+			throw new Error(`Invalid attribute name: ${attributeName}`);
+	}
+}

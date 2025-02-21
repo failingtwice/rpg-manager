@@ -1,6 +1,3 @@
-import { Archetype } from './archetype';
-import { Rarity } from './rarity';
-
 export const ATTRIBUTE_NAMES = {
 	INITIATIVE: 'initiative',
 	HEALTH: 'health',

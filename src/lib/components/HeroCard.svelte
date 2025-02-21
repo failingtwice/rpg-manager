@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Character } from '$lib/logic/character';
+	import { Character, getChracterStatByName, getAttributeDisplayName } from '$lib/logic/character';
 	import { Rarity } from '$lib/logic/rarity';
 	import { STAT_RANGES } from '$lib/logic/attributes';
 
@@ -11,11 +11,21 @@
 		// Normalize the value between 0 and 1
 		const normalized = (value - min) / (max - min);
 
-		if (normalized < 0.2) return 'text-red-600'; // Very Low (🔥 Deep Red)
-		if (normalized < 0.4) return 'text-orange-500'; // Low (🟠 Orange)
-		if (normalized < 0.6) return 'text-yellow-500'; // Medium (🟡 Yellow)
-		if (normalized < 0.8) return 'text-lime-500'; // High (💚 Lime Green)
-		return 'text-green-600'; // Very High (🟢 Deep Green)
+		let className = 'text-left text-white p-1 rounded-lg mb-1 ';
+
+		if (normalized < 0.2) {
+			className += 'bg-red-700'; // Very Low (🔥 Deep Red)
+		} else if (normalized < 0.4) {
+			className += 'bg-orange-700'; // Low (🟠 Orange)
+		} else if (normalized < 0.6) {
+			className += 'bg-yellow-700'; // Medium (🟡 Yellow)
+		} else if (normalized < 0.8) {
+			className += 'bg-lime-700'; // High (💚 Lime Green)
+		} else {
+			className += 'bg-green-700'; // Very High (🟢 Deep Green)
+		}
+
+		return className;
 	};
 </script>
 
@@ -46,86 +56,13 @@
 	</div>
 
 	<div class="mt-2">
-		<p>
-			Initiative: <span class={getStatColor('initiative', character.attributes.initiative)}
-				>{character.attributes.initiative}</span
-			>
-		</p>
-		<p>
-			Health: <span class={getStatColor('health', character.attributes.health)}
-				>{character.attributes.health}</span
-			>
-		</p>
-		<p>
-			Health Regen: <span class={getStatColor('healthRegen', character.attributes.healthRegen)}
-				>{character.attributes.healthRegen}</span
-			>
-		</p>
-		<p>
-			Mana: <span class={getStatColor('mana', character.attributes.mana)}
-				>{character.attributes.mana}</span
-			>
-		</p>
-		<p>
-			Mana Regen: <span class={getStatColor('manaRegen', character.attributes.manaRegen)}
-				>{character.attributes.manaRegen}</span
-			>
-		</p>
-		<p>
-			Attack Damage: <span class={getStatColor('attackDamage', character.attributes.attackDamage)}
-				>{character.attributes.attackDamage}</span
-			>
-		</p>
-		<p>
-			Crit Chance: <span class={getStatColor('critChance', character.attributes.critChance)}
-				>{character.attributes.critChance}</span
-			>
-		</p>
-		<p>
-			Crit Mult: <span class={getStatColor('critMult', character.attributes.critMult)}
-				>{character.attributes.critMult}</span
-			>
-		</p>
-		<p>
-			Armor: <span class={getStatColor('armor', character.attributes.armor)}
-				>{character.attributes.armor}</span
-			>
-		</p>
-		<p>
-			Armor Pen: <span class={getStatColor('armorPen', character.attributes.armorPen)}
-				>{character.attributes.armorPen}</span
-			>
-		</p>
-		<p>
-			Accuracy: <span class={getStatColor('accuracy', character.attributes.accuracy)}
-				>{character.attributes.accuracy}</span
-			>
-		</p>
-		<p>
-			Evasion: <span class={getStatColor('evasion', character.attributes.evasion)}
-				>{character.attributes.evasion}</span
-			>
-		</p>
-		<p>
-			Magic Power: <span class={getStatColor('magicPower', character.attributes.magicPower)}
-				>{character.attributes.magicPower}</span
-			>
-		</p>
-		<p>
-			Magic Pen: <span class={getStatColor('magicPen', character.attributes.magicPen)}
-				>{character.attributes.magicPen}</span
-			>
-		</p>
-		<p>
-			Magic Resist: <span class={getStatColor('magicResist', character.attributes.magicResist)}
-				>{character.attributes.magicResist}</span
-			>
-		</p>
-		<p>
-			Status Resist: <span class={getStatColor('statusResist', character.attributes.statusResist)}
-				>{character.attributes.statusResist}</span
-			>
-		</p>
+		{#each Object.keys(character.attributes) as stat}
+			<div>
+				<p class={getStatColor(stat, getChracterStatByName(character, stat))}>
+					{getAttributeDisplayName(stat)}: {getChracterStatByName(character, stat)}
+				</p>
+			</div>
+		{/each}
 	</div>
 	<hr class="my-2 bg-stone-400" />
 	<div class="flex justify-between">

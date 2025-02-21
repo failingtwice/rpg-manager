@@ -2,7 +2,7 @@ import { Attributes } from './attributes';
 import { getRandomName } from './names';
 import { SpeciesName, getRandomSpecies } from './species';
 import { getPortrait } from './portrait';
-import { getRandomAge } from './age';
+import { getRandomAge, getRandomDevelopmentCurve } from './age';
 import { Random } from './random';
 import { Rarity, getRandomRarity } from './rarity';
 import { Archetype, getRandomArchetype } from './archetype';
@@ -21,6 +21,7 @@ export class Character {
 	cooperation: number;
 
 	attributes: Attributes;
+	developmentCurve: number[];
 
 	constructor(
 		name: string,
@@ -35,7 +36,8 @@ export class Character {
 		luck: number,
 		cooperation: number,
 
-		attributes: Attributes
+		attributes: Attributes,
+		developmentCurve: number[]
 	) {
 		this.name = name;
 		this.species = species;
@@ -49,6 +51,7 @@ export class Character {
 		this.luck = luck;
 		this.cooperation = cooperation;
 		this.attributes = attributes;
+		this.developmentCurve = developmentCurve;
 	}
 
 	static randomCharacter(): Character {
@@ -63,6 +66,8 @@ export class Character {
 		const weight = Random.randomNumber(50, 100);
 		const luck = Random.randomNumber(0, 100);
 		const cooperation = Random.randomNumber(0, 100);
+		const developmentCurve = getRandomDevelopmentCurve();
+		const ageFactor = developmentCurve[age];
 
 		return new Character(
 			name,
@@ -75,7 +80,8 @@ export class Character {
 			weight,
 			luck,
 			cooperation,
-			Attributes.createRandomAttributes(archetype, rarity, age)
+			Attributes.createRandomAttributes(archetype, rarity, ageFactor),
+			developmentCurve
 		);
 	}
 }

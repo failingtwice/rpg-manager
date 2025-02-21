@@ -93,14 +93,11 @@ export class Attributes {
 		this.statusResist = statusResist;
 	}
 
-	static createRandomAttributes(archetype: Archetype, rarity: Rarity, age: number): Attributes {
-		// Aging curve (peaks at 35, slow decline after)
-		const peakAge = 35;
-		const decayRate = 0.0005;
-		const ageFactor = Math.exp(-Math.pow(age - peakAge, 2) * decayRate);
-		console.log('age', age);
-		console.log('ageFactor', ageFactor);
-
+	static createRandomAttributes(
+		archetype: Archetype,
+		rarity: Rarity,
+		ageFactor: number
+	): Attributes {
 		const attributes: Record<string, number> = {};
 
 		// Function to generate a random stat value within a **bounded range**

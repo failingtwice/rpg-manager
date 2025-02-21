@@ -29,12 +29,12 @@ export function getRarityFactor(rarity: Rarity): number {
 
 	switch (rarity) {
 		case Rarity.Legendary:
-			return randomVariance(1.5, 0.1); // 1.4 - 1.6
+			return randomVariance(3, 0.5); // 1.4 - 1.6
 		case Rarity.Rare:
-			return randomVariance(1.2, 0.1); // 1.1 - 1.3
+			return randomVariance(2, 0.3); // 1.1 - 1.3
 		case Rarity.Uncommon:
-			return randomVariance(1.0, 0.05); // 0.95 - 1.05
+			return randomVariance(1.5, 0.2); // 0.95 - 1.05
 		case Rarity.Common:
-			return randomVariance(0.8, 0.05); // 0.75 - 0.85
+			return randomVariance(1, 0.1); // 0.75 - 0.85
 	}
 }

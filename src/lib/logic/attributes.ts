@@ -1,162 +1,241 @@
-import { CharacterClass } from './characterClass';
-import { Random } from './random';
+import { Archetype } from './archetype';
 import { Rarity } from './rarity';
 
-export enum Attribute {
-	Strength = 'strength',
-	Dexterity = 'dexterity',
-	Constitution = 'constitution',
-	Intelligence = 'intelligence',
-	Wisdom = 'wisdom',
-	Charisma = 'charisma'
-}
+export const ATTRIBUTE_NAMES = {
+	INITIATIVE: 'initiative',
+	HEALTH: 'health',
+	HEALTH_REGEN: 'healthRegen',
+	MANA: 'mana',
+	MANA_REGEN: 'manaRegen',
+	ATTACK_DAMAGE: 'attackDamage',
+	CRIT_MULT: 'critMult',
+	CRIT_CHANCE: 'critChance',
+	ARMOR: 'armor',
+	ARMOR_PEN: 'armorPen',
+	ACCURACY: 'accuracy',
+	EVASION: 'evasion',
+	MAGIC_POWER: 'magicPower',
+	MAGIC_PEN: 'magicPen',
+	MAGIC_RESIST: 'magicResist',
+	STATUS_RESIST: 'statusResist'
+};
+
+export const STAT_RANGES = {
+	[ATTRIBUTE_NAMES.INITIATIVE]: [1, 20],
+	[ATTRIBUTE_NAMES.HEALTH]: [200, 500],
+	[ATTRIBUTE_NAMES.HEALTH_REGEN]: [0, 20],
+	[ATTRIBUTE_NAMES.MANA]: [100, 200],
+	[ATTRIBUTE_NAMES.MANA_REGEN]: [0, 20],
+	[ATTRIBUTE_NAMES.ATTACK_DAMAGE]: [20, 100],
+	[ATTRIBUTE_NAMES.CRIT_MULT]: [1.5, 5.0],
+	[ATTRIBUTE_NAMES.CRIT_CHANCE]: [0, 50],
+	[ATTRIBUTE_NAMES.ARMOR]: [5, 50],
+	[ATTRIBUTE_NAMES.ARMOR_PEN]: [0, 30],
+	[ATTRIBUTE_NAMES.ACCURACY]: [50, 99],
+	[ATTRIBUTE_NAMES.EVASION]: [0, 40],
+	[ATTRIBUTE_NAMES.MAGIC_POWER]: [20, 100],
+	[ATTRIBUTE_NAMES.MAGIC_PEN]: [0, 30],
+	[ATTRIBUTE_NAMES.MAGIC_RESIST]: [0, 50],
+	[ATTRIBUTE_NAMES.STATUS_RESIST]: [0, 50]
+};
 
 export class Attributes {
-	strength: number;
-	dexterity: number;
-	constitution: number;
-	intelligence: number;
-	wisdom: number;
-	charisma: number;
-	rarity: Rarity;
+	private _initiative: number;
+	private _health: number;
+	private _healthRegen: number;
+	private _mana: number;
+	private _manaRegen: number;
+	private _attackDamage: number;
+	private _critMult: number;
+	private _critChance: number;
+	private _armor: number;
+	private _armorPen: number;
+	private _accuracy: number;
+	private _evasion: number;
+	private _magicPower: number;
+	private _magicPen: number;
+	private _magicResist: number;
+	private _statusResist: number;
 
 	constructor(
-		strength: number,
-		dexterity: number,
-		constitution: number,
-		intelligence: number,
-		wisdom: number,
-		charisma: number,
-		rarity: Rarity
+		initiative: number,
+		health: number,
+		healthRegen: number,
+		mana: number,
+		manaRegen: number,
+		attackDamage: number,
+		critMult: number,
+		critChance: number,
+		armor: number,
+		armorPen: number,
+		accuracy: number,
+		evasion: number,
+		magicPower: number,
+		magicPen: number,
+		magicResist: number,
+		statusResist: number
 	) {
-		this.strength = strength;
-		this.dexterity = dexterity;
-		this.constitution = constitution;
-		this.intelligence = intelligence;
-		this.wisdom = wisdom;
-		this.charisma = charisma;
-		this.rarity = rarity;
+		this._initiative = initiative;
+		this._health = health;
+		this._healthRegen = healthRegen;
+		this._mana = mana;
+		this._manaRegen = manaRegen;
+		this._attackDamage = attackDamage;
+		this._critMult = critMult;
+		this._critChance = critChance;
+		this._armor = armor;
+		this._armorPen = armorPen;
+		this._accuracy = accuracy;
+		this._evasion = evasion;
+		this._magicPower = magicPower;
+		this._magicPen = magicPen;
+		this._magicResist = magicResist;
+		this._statusResist = statusResist;
 	}
 
-	static createRandomAttributes(rarity: Rarity, characterClass: CharacterClass, age: number) {
-		// **1. Bell Curve Distribution Function**
-		const normalRoll = (mean: number, stdDev: number) => {
-			let sum = 0;
-			for (let i = 0; i < 3; i++) {
-				sum += Random.randomNumber(mean - stdDev, mean + stdDev);
-			}
-			return Math.round(sum / 3);
-		};
+	public get initiative() {
+		return this._initiative;
+	}
 
-		// **2. Rarity Influence (Biggest Factor)**
-		const rarityModifiers = {
-			[Rarity.Common]: { meanBoost: 0, stdDevBoost: 0 },
-			[Rarity.Uncommon]: { meanBoost: 8, stdDevBoost: 5 },
-			[Rarity.Rare]: { meanBoost: 15, stdDevBoost: 10 },
-			[Rarity.Legendary]: { meanBoost: 20, stdDevBoost: 12 }
-		};
+	public get health() {
+		return this._health;
+	}
 
-		const { meanBoost, stdDevBoost } = rarityModifiers[rarity];
+	public get healthRegen() {
+		return this._healthRegen;
+	}
 
-		// **3. Base Stats Before Age Influence**
-		let strength = normalRoll(50 + meanBoost, 12 + stdDevBoost);
-		let dexterity = normalRoll(50 + meanBoost, 12 + stdDevBoost);
-		let constitution = normalRoll(50 + meanBoost, 12 + stdDevBoost);
-		let intelligence = normalRoll(50 + meanBoost, 12 + stdDevBoost);
-		let wisdom = normalRoll(50 + meanBoost, 12 + stdDevBoost);
-		let charisma = normalRoll(50 + meanBoost, 12 + stdDevBoost);
+	public get mana() {
+		return this._mana;
+	}
 
-		// **4. Apply Age-Based Modifiers**
-		// Physical stats peak at 35, plateau until 45, and then decline.
-		// Wisdom keeps increasing.
-		const ageFactor = (age - 35) / 25; // Starts declining past 35, but subtly.
+	public get manaRegen() {
+		return this._manaRegen;
+	}
 
-		if (age < 35) {
-			// **Younger than 35 → Increasing Physical Stats**
-			strength *= 1 + (age - 15) * 0.015; // Gradually increases from 15 to 35
-			dexterity *= 1 + (age - 15) * 0.015;
-			constitution *= 1 + (age - 15) * 0.012;
-			intelligence *= 1 + (age - 15) * 0.005; // Small boost
-			wisdom *= 1 + (age - 15) * 0.01; // Small boost
-			charisma *= 1 + (age - 15) * 0.007; // Small boost
-		} else if (age > 45) {
-			// **Older than 45 → Subtle Physical Decline, but Wisdom Grows**
-			strength *= 1 - Math.min(0.15, (ageFactor - 0.4) * 0.5);
-			dexterity *= 1 - Math.min(0.12, (ageFactor - 0.4) * 0.4);
-			constitution *= 1 - Math.min(0.1, (ageFactor - 0.4) * 0.3);
-			intelligence *= 1 + (ageFactor - 0.4) * 0.2;
-			wisdom *= 1 + (ageFactor - 0.4) * 0.5; // Grows faster
-			charisma *= 1 + (ageFactor - 0.4) * 0.1;
-		}
+	public get attackDamage() {
+		return this._attackDamage;
+	}
 
-		// **5. Class Influence (Weighted Primary Stats)**
-		const primaryWeight = 1.4; // 40% boost to main attribute
-		const secondaryWeight = 1.15; // 15% boost to secondary attribute
+	public get critMult() {
+		return this._critMult;
+	}
 
-		switch (characterClass) {
-			case CharacterClass.Barbarian:
-				strength = strength * primaryWeight;
-				break;
-			case CharacterClass.Bard:
-				charisma = charisma * primaryWeight;
-				break;
-			case CharacterClass.Cleric:
-				wisdom = wisdom * primaryWeight;
-				break;
-			case CharacterClass.Druid:
-				wisdom = wisdom * primaryWeight;
-				break;
-			case CharacterClass.Fighter:
-				strength = strength * primaryWeight;
-				dexterity = dexterity * secondaryWeight;
-				break;
-			case CharacterClass.Monk:
-				dexterity = dexterity * primaryWeight;
-				wisdom = wisdom * secondaryWeight;
-				break;
-			case CharacterClass.Paladin:
-				strength = strength * primaryWeight;
-				charisma = charisma * secondaryWeight;
-				break;
-			case CharacterClass.Ranger:
-				dexterity = dexterity * primaryWeight;
-				wisdom = wisdom * secondaryWeight;
-				break;
-			case CharacterClass.Rogue:
-				dexterity = dexterity * primaryWeight;
-				break;
-			case CharacterClass.Sorcerer:
-				charisma = charisma * primaryWeight;
-				break;
-			case CharacterClass.Warlock:
-				charisma = charisma * primaryWeight;
-				break;
-			case CharacterClass.Wizard:
-				intelligence = intelligence * primaryWeight;
-				break;
-			default:
-				throw new Error(`Unknown character class: ${characterClass}`);
-		}
+	public get critChance() {
+		return this._critChance;
+	}
 
-		// **6. Ensure Stats Stay Between 1 and 99**
-		const clamp = (value: number) => Math.round(Math.min(99, Math.max(1, value)));
+	public get armor() {
+		return this._armor;
+	}
 
-		strength = clamp(strength);
-		dexterity = clamp(dexterity);
-		constitution = clamp(constitution);
-		intelligence = clamp(intelligence);
-		wisdom = clamp(wisdom);
-		charisma = clamp(charisma);
+	public get armorPen() {
+		return this._armorPen;
+	}
 
-		// **7. Return Attributes**
+	public get accuracy() {
+		return this._accuracy;
+	}
+
+	public get evasion() {
+		return this._evasion;
+	}
+
+	public get magicPower() {
+		return this._magicPower;
+	}
+
+	public get magicPen() {
+		return this._magicPen;
+	}
+
+	public get magicResist() {
+		return this._magicResist;
+	}
+
+	public get statusResist() {
+		return this._statusResist;
+	}
+
+	static serialize(attributes: Attributes): string {
+		return JSON.stringify({
+			initiative: attributes.initiative,
+			health: attributes.health,
+			healthRegen: attributes.healthRegen,
+			mana: attributes.mana,
+			manaRegen: attributes.manaRegen,
+			attackDamage: attributes.attackDamage,
+			critMult: attributes.critMult,
+			critChance: attributes.critChance,
+			armor: attributes.armor,
+			armorPen: attributes.armorPen,
+			accuracy: attributes.accuracy,
+			evasion: attributes.evasion,
+			magicPower: attributes.magicPower,
+			magicPen: attributes.magicPen,
+			magicResist: attributes.magicResist,
+			statusResist: attributes.statusResist
+		});
+	}
+
+	static deserialize(attributesData: string): Attributes {
+		const data = JSON.parse(attributesData);
+
 		return new Attributes(
-			strength,
-			dexterity,
-			constitution,
-			intelligence,
-			wisdom,
-			charisma,
-			rarity
+			data.initiative,
+			data.health,
+			data.healthRegen,
+			data.mana,
+			data.manaRegen,
+			data.attackDamage,
+			data.critMult,
+			data.critChance,
+			data.armor,
+			data.armorPen,
+			data.accuracy,
+			data.evasion,
+			data.magicPower,
+			data.magicPen,
+			data.magicResist,
+			data.statusResist
+		);
+	}
+
+	static createRandomAttributes(archetype: Archetype, rarity: Rarity, age: number): Attributes {
+		// Aging curve (peaks at 35, slow decline after)
+		const peakAge = 35;
+		const decayRate = 0.03;
+		const ageFactor = Math.exp(-((age - peakAge) ** 2) * decayRate);
+
+		const attributes: Record<string, number> = {};
+
+		// Function to generate a random stat value within a **bounded range**
+		const randomStat = (min: number, max: number): number => {
+			return Math.random() * (max - min + 1) + min;
+		};
+
+		for (const key in STAT_RANGES) {
+			const [min, max] = STAT_RANGES[key];
+			attributes[key] = randomStat(min, max);
+		}
+
+		return new Attributes(
+			Math.floor(attributes.initiative),
+			Math.floor(attributes.health),
+			Math.floor(attributes.healthRegen),
+			Math.floor(attributes.mana),
+			Math.floor(attributes.manaRegen),
+			Math.floor(attributes.attackDamage),
+			Math.floor(attributes.critMult),
+			Math.floor(attributes.critChance),
+			Math.floor(attributes.armor),
+			Math.floor(attributes.armorPen),
+			Math.floor(attributes.accuracy),
+			Math.floor(attributes.evasion),
+			Math.floor(attributes.magicPower),
+			Math.floor(attributes.magicPen),
+			Math.floor(attributes.magicResist),
+			Math.floor(attributes.statusResist)
 		);
 	}
 }

@@ -1,18 +1,17 @@
 import { Attributes } from './attributes';
-import Dice from './dice';
 import { getRandomName } from './names';
 import { SpeciesName, getRandomSpecies } from './species';
 import { getPortrait } from './portrait';
 import { getRandomAge } from './age';
 import { Random } from './random';
 import { Rarity, getRandomRarity } from './rarity';
-import { CharacterClass, getRandomCharacterClass } from './characterClass';
+import { Archetype, getRandomArchetype } from './archetype';
 
 export class Character {
 	name: string;
 	species: SpeciesName;
 	rarity: Rarity;
-	characterClass: CharacterClass;
+	archetype: Archetype;
 	portrait: string;
 	age: number;
 	height: number;
@@ -23,13 +22,11 @@ export class Character {
 
 	attributes: Attributes;
 
-	average: number;
-
 	constructor(
 		name: string,
 		species: SpeciesName,
 		rarity: Rarity,
-		characterClass: CharacterClass,
+		archetype: Archetype,
 		portrait: string,
 		age: number,
 		height: number,
@@ -43,7 +40,7 @@ export class Character {
 		this.name = name;
 		this.species = species;
 		this.rarity = rarity;
-		this.characterClass = characterClass;
+		this.archetype = archetype;
 		this.portrait = portrait;
 		this.age = age;
 		this.height = height;
@@ -52,22 +49,46 @@ export class Character {
 		this.luck = luck;
 		this.cooperation = cooperation;
 		this.attributes = attributes;
+	}
 
-		this.average = Math.floor(
-			(this.attributes.strength +
-				this.attributes.dexterity +
-				this.attributes.constitution +
-				this.attributes.intelligence +
-				this.attributes.wisdom +
-				this.attributes.charisma) /
-				6
+	static deserialize(characterData: string): Character {
+		const data = JSON.parse(characterData);
+
+		return new Character(
+			data.name,
+			data.species,
+			data.rarity,
+			data.archetype,
+			data.portrait,
+			data.age,
+			data.height,
+			data.weight,
+			data.luck,
+			data.cooperation,
+			Attributes.deserialize(data.attributes)
 		);
+	}
+
+	static serialize(character: Character): string {
+		return JSON.stringify({
+			name: character.name,
+			species: character.species,
+			rarity: character.rarity,
+			archetype: character.archetype,
+			portrait: character.portrait,
+			age: character.age,
+			height: character.height,
+			weight: character.weight,
+			luck: character.luck,
+			cooperation: character.cooperation,
+			attributes: Attributes.serialize(character.attributes)
+		});
 	}
 
 	static randomCharacter(): Character {
 		const species = getRandomSpecies();
 		const name = getRandomName(species);
-		const characterClass = getRandomCharacterClass();
+		const archetype = getRandomArchetype();
 		const portrait = getPortrait(species);
 		const rarity = getRandomRarity();
 		const age = getRandomAge();
@@ -81,14 +102,14 @@ export class Character {
 			name,
 			species,
 			rarity,
-			characterClass,
+			archetype,
 			portrait,
 			age,
 			height,
 			weight,
 			luck,
 			cooperation,
-			Attributes.createRandomAttributes(rarity, characterClass, age)
+			Attributes.createRandomAttributes(archetype, rarity, age)
 		);
 	}
 }

@@ -5,11 +5,13 @@ import { SpeciesName, getRandomSpecies } from './species';
 import { getPortrait } from './portrait';
 import { getRandomAge } from './age';
 import { Random } from './random';
-import { getRandomRarity } from './rarity';
+import { Rarity, getRandomRarity } from './rarity';
 import { CharacterClass, getRandomCharacterClass } from './characterClass';
+
 export class Character {
 	name: string;
 	species: SpeciesName;
+	rarity: Rarity;
 	characterClass: CharacterClass;
 	portrait: string;
 	age: number;
@@ -26,6 +28,7 @@ export class Character {
 	constructor(
 		name: string,
 		species: SpeciesName,
+		rarity: Rarity,
 		characterClass: CharacterClass,
 		portrait: string,
 		age: number,
@@ -39,6 +42,7 @@ export class Character {
 	) {
 		this.name = name;
 		this.species = species;
+		this.rarity = rarity;
 		this.characterClass = characterClass;
 		this.portrait = portrait;
 		this.age = age;
@@ -76,6 +80,7 @@ export class Character {
 		return new Character(
 			name,
 			species,
+			rarity,
 			characterClass,
 			portrait,
 			age,

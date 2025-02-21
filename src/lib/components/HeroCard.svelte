@@ -32,8 +32,8 @@
 <div
 	class="w-156px rounded-lg p-4 pt-2"
 	class:bg-stone-200={character.rarity === Rarity.Common}
-	class:bg-sky-200={character.rarity === Rarity.Uncommon}
-	class:bg-orange-200={character.rarity === Rarity.Rare}
+	class:bg-green-200={character.rarity === Rarity.Uncommon}
+	class:bg-sky-200={character.rarity === Rarity.Rare}
 	class:bg-purple-200={character.rarity === Rarity.Legendary}
 >
 	<div class="align-center flex justify-between">

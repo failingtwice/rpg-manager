@@ -40,22 +40,22 @@ export const STAT_RANGES = {
 };
 
 export class Attributes {
-	private _initiative: number;
-	private _health: number;
-	private _healthRegen: number;
-	private _mana: number;
-	private _manaRegen: number;
-	private _attackDamage: number;
-	private _critMult: number;
-	private _critChance: number;
-	private _armor: number;
-	private _armorPen: number;
-	private _accuracy: number;
-	private _evasion: number;
-	private _magicPower: number;
-	private _magicPen: number;
-	private _magicResist: number;
-	private _statusResist: number;
+	public initiative: number;
+	public health: number;
+	public healthRegen: number;
+	public mana: number;
+	public manaRegen: number;
+	public attackDamage: number;
+	public critMult: number;
+	public critChance: number;
+	public armor: number;
+	public armorPen: number;
+	public accuracy: number;
+	public evasion: number;
+	public magicPower: number;
+	public magicPen: number;
+	public magicResist: number;
+	public statusResist: number;
 
 	constructor(
 		initiative: number,
@@ -75,130 +75,22 @@ export class Attributes {
 		magicResist: number,
 		statusResist: number
 	) {
-		this._initiative = initiative;
-		this._health = health;
-		this._healthRegen = healthRegen;
-		this._mana = mana;
-		this._manaRegen = manaRegen;
-		this._attackDamage = attackDamage;
-		this._critMult = critMult;
-		this._critChance = critChance;
-		this._armor = armor;
-		this._armorPen = armorPen;
-		this._accuracy = accuracy;
-		this._evasion = evasion;
-		this._magicPower = magicPower;
-		this._magicPen = magicPen;
-		this._magicResist = magicResist;
-		this._statusResist = statusResist;
-	}
-
-	public get initiative() {
-		return this._initiative;
-	}
-
-	public get health() {
-		return this._health;
-	}
-
-	public get healthRegen() {
-		return this._healthRegen;
-	}
-
-	public get mana() {
-		return this._mana;
-	}
-
-	public get manaRegen() {
-		return this._manaRegen;
-	}
-
-	public get attackDamage() {
-		return this._attackDamage;
-	}
-
-	public get critMult() {
-		return this._critMult;
-	}
-
-	public get critChance() {
-		return this._critChance;
-	}
-
-	public get armor() {
-		return this._armor;
-	}
-
-	public get armorPen() {
-		return this._armorPen;
-	}
-
-	public get accuracy() {
-		return this._accuracy;
-	}
-
-	public get evasion() {
-		return this._evasion;
-	}
-
-	public get magicPower() {
-		return this._magicPower;
-	}
-
-	public get magicPen() {
-		return this._magicPen;
-	}
-
-	public get magicResist() {
-		return this._magicResist;
-	}
-
-	public get statusResist() {
-		return this._statusResist;
-	}
-
-	static serialize(attributes: Attributes): string {
-		return JSON.stringify({
-			initiative: attributes.initiative,
-			health: attributes.health,
-			healthRegen: attributes.healthRegen,
-			mana: attributes.mana,
-			manaRegen: attributes.manaRegen,
-			attackDamage: attributes.attackDamage,
-			critMult: attributes.critMult,
-			critChance: attributes.critChance,
-			armor: attributes.armor,
-			armorPen: attributes.armorPen,
-			accuracy: attributes.accuracy,
-			evasion: attributes.evasion,
-			magicPower: attributes.magicPower,
-			magicPen: attributes.magicPen,
-			magicResist: attributes.magicResist,
-			statusResist: attributes.statusResist
-		});
-	}
-
-	static deserialize(attributesData: string): Attributes {
-		const data = JSON.parse(attributesData);
-
-		return new Attributes(
-			data.initiative,
-			data.health,
-			data.healthRegen,
-			data.mana,
-			data.manaRegen,
-			data.attackDamage,
-			data.critMult,
-			data.critChance,
-			data.armor,
-			data.armorPen,
-			data.accuracy,
-			data.evasion,
-			data.magicPower,
-			data.magicPen,
-			data.magicResist,
-			data.statusResist
-		);
+		this.initiative = initiative;
+		this.health = health;
+		this.healthRegen = healthRegen;
+		this.mana = mana;
+		this.manaRegen = manaRegen;
+		this.attackDamage = attackDamage;
+		this.critMult = critMult;
+		this.critChance = critChance;
+		this.armor = armor;
+		this.armorPen = armorPen;
+		this.accuracy = accuracy;
+		this.evasion = evasion;
+		this.magicPower = magicPower;
+		this.magicPen = magicPen;
+		this.magicResist = magicResist;
+		this.statusResist = statusResist;
 	}
 
 	static createRandomAttributes(archetype: Archetype, rarity: Rarity, age: number): Attributes {

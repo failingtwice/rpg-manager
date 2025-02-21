@@ -4,8 +4,7 @@
 	import { Character } from '$lib/logic/character';
 
 	function addCharacter() {
-		const randomCharacter = Character.randomCharacter();
-		player.roster.push(Character.serialize(randomCharacter));
+		player.roster.push(Character.randomCharacter());
 	}
 
 	function clearRoster() {
@@ -22,6 +21,6 @@
 
 <div class="grid grid-cols-3 gap-4">
 	{#each player.roster as character}
-		<HeroCard character={Character.deserialize(character)} />
+		<HeroCard {character} />
 	{/each}
 </div>

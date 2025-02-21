@@ -51,40 +51,6 @@ export class Character {
 		this.attributes = attributes;
 	}
 
-	static deserialize(characterData: string): Character {
-		const data = JSON.parse(characterData);
-
-		return new Character(
-			data.name,
-			data.species,
-			data.rarity,
-			data.archetype,
-			data.portrait,
-			data.age,
-			data.height,
-			data.weight,
-			data.luck,
-			data.cooperation,
-			Attributes.deserialize(data.attributes)
-		);
-	}
-
-	static serialize(character: Character): string {
-		return JSON.stringify({
-			name: character.name,
-			species: character.species,
-			rarity: character.rarity,
-			archetype: character.archetype,
-			portrait: character.portrait,
-			age: character.age,
-			height: character.height,
-			weight: character.weight,
-			luck: character.luck,
-			cooperation: character.cooperation,
-			attributes: Attributes.serialize(character.attributes)
-		});
-	}
-
 	static randomCharacter(): Character {
 		const species = getRandomSpecies();
 		const name = getRandomName(species);

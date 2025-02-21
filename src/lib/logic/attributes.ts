@@ -96,14 +96,31 @@ export class Attributes {
 	static createRandomAttributes(archetype: Archetype, rarity: Rarity, age: number): Attributes {
 		// Aging curve (peaks at 35, slow decline after)
 		const peakAge = 35;
-		const decayRate = 0.03;
-		const ageFactor = Math.exp(-((age - peakAge) ** 2) * decayRate);
+		const decayRate = 0.0005;
+		const ageFactor = Math.exp(-Math.pow(age - peakAge, 2) * decayRate);
+		console.log('age', age);
+		console.log('ageFactor', ageFactor);
 
 		const attributes: Record<string, number> = {};
 
 		// Function to generate a random stat value within a **bounded range**
+		const randomStatWithBias = (min: number, max: number, bias: number): number => {
+			return Math.floor(min + (max - min) * Math.pow(bias, 2));
+		};
+
 		const randomStat = (min: number, max: number): number => {
-			return Math.random() * (max - min + 1) + min;
+			let sum = 0;
+
+			for (let i = 0; i < 3; i++) {
+				const value = Math.floor(min + (max - min) * Math.random());
+				if (value > min && value < max) {
+					sum += value;
+				}
+			}
+
+			sum + randomStatWithBias(min, max, ageFactor);
+
+			return Math.floor(sum / 4);
 		};
 
 		for (const key in STAT_RANGES) {

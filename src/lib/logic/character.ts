@@ -4,8 +4,8 @@ import { SpeciesName, getRandomSpecies } from './species';
 import { getPortrait } from './portrait';
 import { getRandomAge, getRandomDevelopmentCurve } from './age';
 import { Random } from './random';
-import { Rarity, getRandomRarity } from './rarity';
-import { Archetype, getRandomArchetype } from './archetype';
+import { Rarity, getRandomRarity, getRarityFactor } from './rarity';
+import { Archetype, getArchetypeAttributes, getRandomArchetype } from './archetype';
 
 export class Character {
 	name: string;
@@ -60,6 +60,7 @@ export class Character {
 		const archetype = getRandomArchetype();
 		const portrait = getPortrait(species);
 		const rarity = getRandomRarity();
+		const rarityFactor = getRarityFactor(rarity);
 		const age = getRandomAge();
 
 		const height = Random.randomNumber(100, 200);
@@ -80,7 +81,7 @@ export class Character {
 			weight,
 			luck,
 			cooperation,
-			Attributes.createRandomAttributes(archetype, rarity, ageFactor),
+			Attributes.createRandomAttributes(getArchetypeAttributes(archetype), rarityFactor, ageFactor),
 			developmentCurve
 		);
 	}

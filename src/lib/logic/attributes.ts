@@ -94,35 +94,34 @@ export class Attributes {
 	}
 
 	static createRandomAttributes(
-		archetype: Archetype,
-		rarity: Rarity,
+		primaryAttributes: string[],
+		rarityFactor: number,
 		ageFactor: number
 	): Attributes {
 		const attributes: Record<string, number> = {};
 
 		// Function to generate a random stat value within a **bounded range**
 		const randomStatWithBias = (min: number, max: number, bias: number): number => {
-			return Math.floor(min + (max - min) * Math.pow(bias, 2));
+			return Math.floor(min + (max - min) * Math.pow(bias, 1.5));
 		};
 
-		const randomStat = (min: number, max: number): number => {
-			let sum = 0;
-
-			for (let i = 0; i < 3; i++) {
-				const value = Math.floor(min + (max - min) * Math.random());
-				if (value > min && value < max) {
-					sum += value;
-				}
-			}
-
-			sum + randomStatWithBias(min, max, ageFactor);
-
-			return Math.floor(sum / 4);
-		};
+		const averageBias = 0.45;
 
 		for (const key in STAT_RANGES) {
 			const [min, max] = STAT_RANGES[key];
-			attributes[key] = randomStat(min, max);
+			attributes[key] = randomStatWithBias(min, max, averageBias);
+		}
+
+		for (const key in attributes) {
+			attributes[key] *= rarityFactor;
+		}
+
+		for (const key in attributes) {
+			attributes[key] *= ageFactor;
+		}
+
+		for (const key in primaryAttributes) {
+			attributes[key] *= 1.5;
 		}
 
 		return new Attributes(

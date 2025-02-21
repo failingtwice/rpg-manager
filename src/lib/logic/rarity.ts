@@ -22,3 +22,19 @@ export function getRandomRarity(): Rarity {
 	if (value <= rarityChance[Rarity.Uncommon]) return Rarity.Uncommon;
 	return Rarity.Common;
 }
+
+export function getRarityFactor(rarity: Rarity): number {
+	const randomVariance = (base: number, variance: number) =>
+		base + (Math.random() * 2 - 1) * variance; // Adds a small randomized offset
+
+	switch (rarity) {
+		case Rarity.Legendary:
+			return randomVariance(1.5, 0.1); // 1.4 - 1.6
+		case Rarity.Rare:
+			return randomVariance(1.2, 0.1); // 1.1 - 1.3
+		case Rarity.Uncommon:
+			return randomVariance(1.0, 0.05); // 0.95 - 1.05
+		case Rarity.Common:
+			return randomVariance(0.8, 0.05); // 0.75 - 0.85
+	}
+}

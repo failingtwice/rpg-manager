@@ -102,7 +102,7 @@ export class Attributes {
 			return Math.floor(min + (max - min) * Math.pow(bias, 1.5));
 		};
 
-		const averageBias = 0.45;
+		const averageBias = 0.65;
 
 		for (const key in STAT_RANGES) {
 			const [min, max] = STAT_RANGES[key];
@@ -117,8 +117,15 @@ export class Attributes {
 			attributes[key] *= ageFactor;
 		}
 
-		for (const key in primaryAttributes) {
-			attributes[key] *= 1.5;
+		const randomVariance = (base: number, variance: number) =>
+			base + (Math.random() * 2 - 1) * variance; // Adds a small randomized offset
+
+		for (const key in attributes) {
+			if (primaryAttributes.includes(key)) {
+				attributes[key] *= randomVariance(1.5, 0.3);
+			} else {
+				attributes[key] *= randomVariance(0.7, 0.3);
+			}
 		}
 
 		return new Attributes(

@@ -6,6 +6,30 @@ import { getRandomAge, getRandomDevelopmentCurve } from './age';
 import { Random } from './random';
 import { Rarity, getRandomRarity, getRarityFactor } from './rarity';
 import { Archetype, getArchetypeAttributes, getRandomArchetype } from './archetype';
+import { Status, Spell, type SpellType } from './spell';
+import { SpellFactory } from './spellFactory';
+
+export class CombatState {
+	public currentHealth: number;
+	public currentMana: number;
+	public combatInitiative: number;
+	public statusDurations: Array<[Status, number]>;
+	public spellCooldowns: Array<[string, number]>;
+
+	constructor(
+		currentHealth: number,
+		currentMana: number,
+		combatInitiative: number,
+		statusDurations: Array<[Status, number]>,
+		spellCooldowns: Array<[string, number]>
+	) {
+		this.currentHealth = currentHealth;
+		this.currentMana = currentMana;
+		this.combatInitiative = combatInitiative;
+		this.statusDurations = statusDurations;
+		this.spellCooldowns = spellCooldowns;
+	}
+}
 
 export class Character {
 	name: string;
@@ -21,7 +45,8 @@ export class Character {
 	cooperation: number;
 
 	attributes: Attributes;
-	developmentCurve: number[];
+	spells: SpellType[] = [];
+	combatState: CombatState;
 
 	constructor(
 		name: string,
@@ -36,8 +61,7 @@ export class Character {
 		luck: number,
 		cooperation: number,
 
-		attributes: Attributes,
-		developmentCurve: number[]
+		attributes: Attributes
 	) {
 		this.name = name;
 		this.species = species;
@@ -51,7 +75,13 @@ export class Character {
 		this.luck = luck;
 		this.cooperation = cooperation;
 		this.attributes = attributes;
-		this.developmentCurve = developmentCurve;
+		this.combatState = new CombatState(
+			attributes.health,
+			attributes.mana,
+			attributes.initiative,
+			[],
+			[]
+		);
 	}
 
 	static randomCharacter(): Character {
@@ -70,7 +100,7 @@ export class Character {
 		const developmentCurve = getRandomDevelopmentCurve();
 		const ageFactor = developmentCurve[age];
 
-		return new Character(
+		const character = new Character(
 			name,
 			species,
 			rarity,
@@ -81,9 +111,16 @@ export class Character {
 			weight,
 			luck,
 			cooperation,
-			Attributes.createRandomAttributes(getArchetypeAttributes(archetype), rarityFactor, ageFactor),
-			developmentCurve
+			Attributes.createRandomAttributes(getArchetypeAttributes(archetype), rarityFactor, ageFactor)
 		);
+
+		const numberOfSpells = Random.randomNumber(4, 7);
+		for (let i = 0; i < numberOfSpells; i++) {
+			const spell = SpellFactory.createRandomSpell(character.attributes);
+			character.spells.push(spell);
+		}
+
+		return character;
 	}
 }
 

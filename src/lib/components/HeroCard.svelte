@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { Character, getChracterStatByName, getAttributeDisplayName } from '$lib/logic/character';
-	import { Rarity } from '$lib/logic/rarity';
 	import { STAT_RANGES } from '$lib/logic/attributes';
 
 	const { character }: { character: Character } = $props();
+
+	console.log(character);
 
 	const getStatColor = (statName: string, value: number): string => {
 		const [min, max] = STAT_RANGES[statName];
@@ -11,72 +12,132 @@
 		// Normalize the value between 0 and 1
 		const normalized = (value - min) / (max - min);
 
-		let className = 'text-left text-white p-1 rounded-lg mb-1 ';
+		// Compute the Red & Green channels dynamically
+		const red = Math.round(255 * (1 - normalized)); // Red decreases as stat increases
+		const green = Math.round(255 * normalized); // Green increases as stat increases
 
-		if (normalized < 0.2) {
-			className += 'bg-red-700'; // Very Low (🔥 Deep Red)
-		} else if (normalized < 0.4) {
-			className += 'bg-orange-700'; // Low (🟠 Orange)
-		} else if (normalized < 0.6) {
-			className += 'bg-yellow-700'; // Medium (🟡 Yellow)
-		} else if (normalized < 0.8) {
-			className += 'bg-lime-700'; // High (💚 Lime Green)
-		} else {
-			className += 'bg-green-700'; // Very High (🟢 Deep Green)
-		}
+		// Return RGB color
+		return `rgb(${red}, ${green}, 0)`;
+	};
 
-		return className;
+	const getStatDivisions = (statName: string, value: number, maxDivisions: number = 20): number => {
+		const [min, max] = STAT_RANGES[statName];
+
+		// Normalize the value between 0 and 1
+		const normalized = (value - min) / (max - min);
+
+		// Calculate the number of divisions, rounded to an integer
+		return Math.min(maxDivisions, Math.max(1, Math.round(normalized * maxDivisions)));
 	};
 </script>
 
-<div
-	class="w-156px rounded-lg p-4 pt-2"
-	class:bg-stone-200={character.rarity === Rarity.Common}
-	class:bg-green-200={character.rarity === Rarity.Uncommon}
-	class:bg-sky-200={character.rarity === Rarity.Rare}
-	class:bg-purple-200={character.rarity === Rarity.Legendary}
->
-	<div class="align-center flex justify-between">
-		<h1 class="whitespace-nowrap">
+<div class={`hero-card ${character.rarity}`}>
+	<img src={character.portrait} alt={character.name} />
+	<div class="hero-card-info">
+		<h1>
 			{character.name}
 		</h1>
-	</div>
-	<img class="mx-auto rounded-lg" src={character.portrait} alt={character.name} />
 
-	<div>
-		<p>
-			Species: {character.species.toString()}
-		</p>
-		<p>
-			Age: {character.age}
-		</p>
-		<p>
-			Archetype: {character.archetype.toString()}
-		</p>
-	</div>
+		<div class="hero-card-info-item">
+			<p>{character.species.toString()}</p>
+			<p>{character.archetype.toString()}</p>
+		</div>
 
-	<div class="mt-2">
-		{#each Object.keys(character.attributes) as stat}
-			<div>
-				<p class={getStatColor(stat, getChracterStatByName(character, stat))}>
-					{getAttributeDisplayName(stat)}: {getChracterStatByName(character, stat)}
-				</p>
-			</div>
-		{/each}
-	</div>
-	<hr class="my-2 bg-stone-400" />
-	<div class="flex justify-between">
-		<p class="text-center text-yellow-700">
-			LCK <span class="font-bold">{character.luck}</span>
-		</p>
-		<p class="text-center text-sky-700">
-			COOP <span class="font-bold">{character.cooperation}</span>
-		</p>
+		<hr class="hero-card-divider" />
+
+		<div class="hero-card-info-item">
+			<p>{character.age} y/o</p>
+			<p>{character.height}cm</p>
+			<p>{character.weight}kg</p>
+		</div>
+
+		<hr class="hero-card-divider" />
+
+		<div>
+			{#each Object.keys(character.attributes)
+				.sort((a, b) => {
+					const normalizedA = (getChracterStatByName(character, a) - STAT_RANGES[a][0]) / (STAT_RANGES[a][1] - STAT_RANGES[a][0]);
+					const normalizedB = (getChracterStatByName(character, b) - STAT_RANGES[b][0]) / (STAT_RANGES[b][1] - STAT_RANGES[b][0]);
+					return normalizedB - normalizedA; // Sort by highest normalized value
+				})
+				.slice(0, 5) as stat}
+				<div>
+					<p>
+						{getAttributeDisplayName(stat)}: {getChracterStatByName(character, stat)}
+					</p>
+
+					<div class="progress-block-container">
+						{#each Array.from({ length: getStatDivisions(stat, getChracterStatByName(character, stat), 20) }, (_, i) => i) as block}
+							<div
+								class="progress-block"
+								style="background-color: {getStatColor(
+									stat,
+									getChracterStatByName(character, stat)
+								)}"
+							>
+								&nbsp;
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/each}
+		</div>
 	</div>
 </div>
 
 <style>
-	p span {
-		font-size: 20px;
+	.hero-card {
+		width: 220px;
+		overflow: hidden;
+		background-color: rgb(203, 206, 208);
+	}
+
+	.hero-card-info {
+		padding: 6px;
+	}
+
+	.hero-card-divider {
+		margin: 6px 0;
+		border-color: #808080;
+		border-width: 1px;
+	}
+
+	.hero-card-info-item {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.hero-card p {
+		font-size: 12px;
+		color: #1a1a1a;
+	}
+
+	.hero-card h1 {
+		font-size: 12px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		font-weight: 600;
+		color: #1a1a1a;
+		margin-bottom: 6px;
+	}
+
+	.hero-card img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		height: 220px;
+	}
+
+	.progress-block {
+		width: auto;
+		height: 12px;
+		background-color: #1a1a1a;
+	}
+
+	.progress-block-container {
+		display: grid;
+		grid-template-columns: repeat(20, 1fr);
+		gap: 2px;
 	}
 </style>

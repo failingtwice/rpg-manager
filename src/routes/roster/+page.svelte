@@ -19,8 +19,18 @@
 
 <button on:click={clearRoster}>Clear roster</button>
 
-<div class="grid grid-cols-3 gap-4">
+<div class="roster">
 	{#each player.roster as character}
 		<HeroCard {character} />
 	{/each}
 </div>
+
+<style>
+	.roster {
+		display: grid;
+		padding: 12px;
+		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+		column-gap: 12px;
+		row-gap: 12px;
+	}
+</style>

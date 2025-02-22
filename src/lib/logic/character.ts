@@ -1,7 +1,7 @@
 import { Attributes } from './attributes';
 import { getRandomName } from './names';
 import { SpeciesName, getRandomSpecies } from './species';
-import { getPortrait } from './portrait';
+import { getRandomPortrait } from './portrait';
 import { getRandomAge, getRandomDevelopmentCurve } from './age';
 import { Random } from './random';
 import { Rarity, getRandomRarity, getRarityFactor } from './rarity';
@@ -88,7 +88,7 @@ export class Character {
 		const species = getRandomSpecies();
 		const name = getRandomName(species);
 		const archetype = getRandomArchetype();
-		const portrait = getPortrait(species);
+		const portrait = getRandomPortrait(species);
 		const rarity = getRandomRarity();
 		const rarityFactor = getRarityFactor(rarity);
 		const age = getRandomAge();
@@ -113,7 +113,7 @@ export class Character {
 			cooperation,
 			Attributes.createRandomAttributes(getArchetypeAttributes(archetype), rarityFactor, ageFactor)
 		);
-
+		console.log('Created character with portrait:', character.portrait);
 		const numberOfSpells = Random.randomNumber(4, 7);
 		for (let i = 0; i < numberOfSpells; i++) {
 			const spell = SpellFactory.createRandomSpell(character.attributes);

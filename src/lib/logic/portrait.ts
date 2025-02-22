@@ -1,35 +1,67 @@
-import dragonbornPortrait from '$lib/images/portraits/dragonborn_portrait_pa.png';
-import dwarfPortrait from '$lib/images/portraits/dwarf_portrait_pa.png';
-import elfPortrait from '$lib/images/portraits/elf_portrait_pa.png';
-import gnomePortrait from '$lib/images/portraits/gnome_portrait_pa.png';
-import goliathPortrait from '$lib/images/portraits/goliath_portrait_pa.png';
-import halflingPortrait from '$lib/images/portraits/halfling_portrait_pa.png';
-import humanPortrait from '$lib/images/portraits/human_portrait_pa.png';
-import orcPortrait from '$lib/images/portraits/orc_portrait_pa.png';
-import tieflingPortrait from '$lib/images/portraits/tiefling_portrait_pa.png';
 import { SpeciesName } from './species';
+import { Random } from './random';
 
-export function getPortrait(species: SpeciesName): string {
-	switch (species) {
-		case SpeciesName.Dragonborn:
-			return dragonbornPortrait;
-		case SpeciesName.Dwarf:
-			return dwarfPortrait;
-		case SpeciesName.Elf:
-			return elfPortrait;
-		case SpeciesName.Gnome:
-			return gnomePortrait;
-		case SpeciesName.Goliath:
-			return goliathPortrait;
-		case SpeciesName.Halfling:
-			return halflingPortrait;
-		case SpeciesName.Human:
-			return humanPortrait;
-		case SpeciesName.Orc:
-			return orcPortrait;
-		case SpeciesName.Tiefling:
-			return tieflingPortrait;
-		default:
-			throw new Error('Invalid species');
+// Define type for module imports
+type ModuleType = {
+	default: string;
+};
+
+// Create portrait maps for each species with proper typing
+const portraitMap: Record<SpeciesName, string[]> = {
+	[SpeciesName.Dragonborn]: [],
+	[SpeciesName.Dwarf]: [],
+	[SpeciesName.Elf]: [],
+	[SpeciesName.Gnome]: [],
+	[SpeciesName.Goliath]: [],
+	[SpeciesName.Halfling]: [],
+	[SpeciesName.Human]: [],
+	[SpeciesName.Orc]: [],
+	[SpeciesName.Tiefling]: []
+};
+
+// Use Vite's import.meta.glob with type annotation
+const portraitFiles: Record<string, ModuleType> = import.meta.glob(
+	'$lib/images/portraits/**/*.png',
+	{ eager: true }
+) as Record<string, ModuleType>;
+
+// Sort portraits into their respective arrays
+for (const path in portraitFiles) {
+	const portrait = portraitFiles[path].default;
+
+	if (path.includes('Dragonborn_Portraits')) {
+		portraitMap[SpeciesName.Dragonborn].push(portrait);
+	} else if (path.includes('Dwarf_Portraits')) {
+		portraitMap[SpeciesName.Dwarf].push(portrait);
+	} else if (path.includes('Elf_Portraits')) {
+		portraitMap[SpeciesName.Elf].push(portrait);
+	} else if (path.includes('Gnome_Portraits')) {
+		portraitMap[SpeciesName.Gnome].push(portrait);
+	} else if (path.includes('Goliath_Portraits')) {
+		portraitMap[SpeciesName.Goliath].push(portrait);
+	} else if (path.includes('Halfling_Portraits')) {
+		portraitMap[SpeciesName.Halfling].push(portrait);
+	} else if (path.includes('Human_Portraits')) {
+		portraitMap[SpeciesName.Human].push(portrait);
+	} else if (path.includes('Orc_Portraits')) {
+		portraitMap[SpeciesName.Orc].push(portrait);
+	} else if (path.includes('Tiefling_Portraits')) {
+		portraitMap[SpeciesName.Tiefling].push(portrait);
 	}
+}
+
+export function getRandomPortrait(species: SpeciesName): string {
+	const portraits = portraitMap[species];
+	if (!portraits || portraits.length === 0) {
+		throw new Error(`No portraits found for species: ${species}`);
+	}
+	return Random.pick(portraits);
+}
+
+export function getDefaultPortrait(species: SpeciesName): string {
+	const portraits = portraitMap[species];
+	if (!portraits || portraits.length === 0) {
+		throw new Error(`No portraits found for species: ${species}`);
+	}
+	return portraits[0];
 }

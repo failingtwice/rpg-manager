@@ -9,3 +9,9 @@
 		{@render children()}
 	</main>
 </div>
+
+<style>
+	.app {
+		padding: 12px;
+	}
+</style>

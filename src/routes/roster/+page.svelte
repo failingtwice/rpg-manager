@@ -2,6 +2,7 @@
 	import { player } from '$lib/state/player.svelte';
 	import HeroCard from '$lib/components/HeroCard.svelte';
 	import { Character } from '$lib/logic/character';
+	import Button from '$lib/components/Button.svelte';
 
 	function addCharacter() {
 		player.roster.push(Character.randomCharacter());
@@ -15,9 +16,8 @@
 <p>Name: {player.name}</p>
 <p>Roster size: {player.roster.length}</p>
 
-<button on:click={addCharacter}>Add random character</button>
-
-<button on:click={clearRoster}>Clear roster</button>
+<Button text="Add random character" onClick={addCharacter} />
+<Button text="Clear roster" onClick={clearRoster} />
 
 <div class="roster">
 	{#each player.roster as character}
@@ -27,8 +27,8 @@
 
 <style>
 	.roster {
+		margin-top: 12px;
 		display: grid;
-		padding: 12px;
 		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 		column-gap: 12px;
 		row-gap: 12px;
